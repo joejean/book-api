@@ -9,7 +9,12 @@ var port = process.env.PORT || 3000;
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
 
-var db = mongoose.connect('mongodb://localhost/bookAPI');
+if(process.env.ENV == 'Test')
+	var db = mongoose.connect('mongodb://localhost/bookAPI_test');
+else{	
+	var db = mongoose.connect('mongodb://localhost/bookAPI');
+}
+
 var Book = require('./models/bookModel');
 
 bookRouter = require('./routes/bookRoutes')(Book);
@@ -23,3 +28,5 @@ app.get('/', function(req, res){
 app.listen(port, function(){
 	console.log("Listening on PORT "+port);
 })
+
+module.exports = app;
